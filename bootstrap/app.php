@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,8 +16,5 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // TEMP DEBUG: surface exception text in the response for Vercel diagnostics.
-        $exceptions->render(function (Throwable $e, Request $request) {
-            return response(get_class($e) . ': ' . $e->getMessage(), 500);
-        });
+        //
     })->create();

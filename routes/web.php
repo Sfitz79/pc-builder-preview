@@ -54,17 +54,6 @@ Route::get('/build/{shareSlug}', [BuildController::class, 'show'])
     ->where('shareSlug', '[a-zA-Z0-9]+')
     ->name('build.show');
 
-// TEMP DEBUG: inspect runtime env (values redacted).
-Route::get('/_debug', function () {
-    $keys = ['APP_KEY', 'APP_DEBUG', 'APP_ENV', 'APP_URL', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'APP_CONFIG_CACHE', 'VIEW_COMPILED_PATH', 'LOG_CHANNEL'];
-    $out = [];
-    foreach ($keys as $k) {
-        $v = getenv($k);
-        $out[$k] = $v === false ? '(unset)' : (strlen((string) $v) === 0 ? '(empty)' : substr((string) $v, 0, 14) . '...');
-    }
-    return response()->json($out);
-});
-
 // Public marketing pages use the shared app layout.
 Route::get('/', function () {
     return view('welcome');
