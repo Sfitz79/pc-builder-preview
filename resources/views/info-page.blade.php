@@ -1,4 +1,4 @@
-﻿<x-app-layout :title="$title">
+<x-app-layout :title="$title">
 
     {{-- Page hero --}}
     <section class="mb-12">
@@ -28,7 +28,7 @@
         <x-pctg.hero class="pctg-reveal text-center">
             <h2 class="pctg-pulse text-3xl font-black md:text-4xl">Ready To Get Building?</h2>
             <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-400">
-                Everything above is a click away inside the AI builder â€” pick a budget, pick your games, done.
+                Everything above is a click away inside the AI builder — pick a budget, pick your games, done.
             </p>
             <div class="mt-8 flex justify-center">
                 <x-pctg.button href="/builder" variant="primary" size="lg">

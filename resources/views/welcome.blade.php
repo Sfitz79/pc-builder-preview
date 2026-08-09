@@ -1,4 +1,4 @@
-﻿<x-app-layout title="Welcome">
+<x-app-layout title="Welcome">
 
     @include('partials.intro')
 
@@ -20,7 +20,7 @@
             <p class="pctg-landing-reveal mt-8 max-w-2xl text-lg text-slate-400" style="animation-delay: 240ms">
                 Professional AI recommendations, compatibility checking, FPS estimates and
                 expert UK-built gaming systems. Tell us what you want to play, tell us your
-                budget â€” we'll build the perfect PC.
+                budget — we'll build the perfect PC.
             </p>
 
             <div class="pctg-landing-reveal mt-10 flex flex-wrap gap-4" style="animation-delay: 360ms">
@@ -49,7 +49,7 @@
             </div>
             <div class="pctg-metric text-center">
                 <div class="text-5xl font-black text-red-500">
-                    <span data-pctg-count="4.9" data-pctg-decimals="1" data-pctg-suffix="â˜…">0.0â˜…</span>
+                    <span data-pctg-count="4.9" data-pctg-decimals="1" data-pctg-suffix="★">0.0★</span>
                 </div>
                 <div class="mt-3 text-slate-400">Customer Rating</div>
             </div>
@@ -197,7 +197,7 @@
         <div class="mb-10 text-center pctg-reveal">
             <h2 class="text-4xl font-black">See The AI Builder In Action</h2>
             <p class="mx-auto mt-4 max-w-3xl text-slate-400">
-                Pick a use case, set a budget and hit generate. The same engine that powers the builder â€”
+                Pick a use case, set a budget and hit generate. The same engine that powers the builder —
                 interactive right here, no account needed.
             </p>
         </div>
@@ -209,10 +209,10 @@
                     <h3 class="text-lg font-bold">What are you building?</h3>
 
                     <div class="mt-4 grid grid-cols-2 gap-3">
-                        <button type="button" data-demo-case="gaming" class="demo-case-btn is-active">ðŸŽ® Gaming</button>
-                        <button type="button" data-demo-case="streaming" class="demo-case-btn">ðŸŽ¥ Streaming</button>
-                        <button type="button" data-demo-case="creation" class="demo-case-btn">ðŸŽ¨ Content Creation</button>
-                        <button type="button" data-demo-case="ai" class="demo-case-btn">ðŸ¤– AI Development</button>
+                        <button type="button" data-demo-case="gaming" class="demo-case-btn is-active">🎮 Gaming</button>
+                        <button type="button" data-demo-case="streaming" class="demo-case-btn">🎥 Streaming</button>
+                        <button type="button" data-demo-case="creation" class="demo-case-btn">🎨 Content Creation</button>
+                        <button type="button" data-demo-case="ai" class="demo-case-btn">🤖 AI Development</button>
                     </div>
 
                     <h3 class="mt-8 text-lg font-bold">Budget</h3>
@@ -229,9 +229,9 @@
                     >
 
                     <div class="mt-2 flex items-center justify-between text-sm">
-                        <span class="text-slate-400">Â£800</span>
-                        <span class="font-bold text-white" data-demo-budget-label>Â£1,500</span>
-                        <span class="text-slate-400">Â£3,000</span>
+                        <span class="text-slate-400">£800</span>
+                        <span class="font-bold text-white" data-demo-budget-label>£1,500</span>
+                        <span class="text-slate-400">£3,000</span>
                     </div>
 
                     <div class="mt-8">
@@ -325,7 +325,7 @@
         <div class="mb-10 text-center pctg-reveal">
             <h2 class="text-4xl font-black">Players Trust PCTG</h2>
             <p class="mx-auto mt-4 max-w-3xl text-slate-400">
-                Real builds, real reviews â€” from competitive grinders to full-time streamers.
+                Real builds, real reviews — from competitive grinders to full-time streamers.
             </p>
         </div>
 
@@ -347,7 +347,7 @@
                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-red-500/10 font-black text-red-300 ring-1 ring-red-500/30">SK</span>
                     <div>
                         <div class="font-semibold">Sam K.</div>
-                        <div class="text-xs text-slate-500">Arctic Ghost Â· 9800X3D</div>
+                        <div class="text-xs text-slate-500">Arctic Ghost · 9800X3D</div>
                     </div>
                 </div>
             </x-pctg.hover-card>
@@ -361,14 +361,14 @@
                     <x-pctg.icon name="star" class="h-4 w-4" />
                 </div>
                 <p class="mt-4 text-sm leading-relaxed text-slate-400">
-                    Streaming at 1440P with a 1080P broadcast â€” the FPS estimator was
+                    Streaming at 1440P with a 1080P broadcast — the FPS estimator was
                     within a couple of frames of what I actually get. Genuinely useful.
                 </p>
                 <div class="mt-5 flex items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-purple-500/10 font-black text-purple-300 ring-1 ring-purple-500/30">MT</span>
                     <div>
                         <div class="font-semibold">Morgan T.</div>
-                        <div class="text-xs text-slate-500">Stormbyte Â· Streamer</div>
+                        <div class="text-xs text-slate-500">Stormbyte · Streamer</div>
                     </div>
                 </div>
             </x-pctg.hover-card>
@@ -383,14 +383,14 @@
                 </div>
                 <p class="mt-4 text-sm leading-relaxed text-slate-400">
                     Burn tested, cable managed, and it shipped faster than estimated.
-                    The compatibility check flagged a BIOS note before I ordered â€”
+                    The compatibility check flagged a BIOS note before I ordered —
                     that's the kind of detail that earns a repeat customer.
                 </p>
                 <div class="mt-5 flex items-center gap-3">
                     <span class="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-500/10 font-black text-yellow-300 ring-1 ring-yellow-500/30">AR</span>
                     <div>
                         <div class="font-semibold">Ash R.</div>
-                        <div class="text-xs text-slate-500">Frostbyte XT Â· 1440P</div>
+                        <div class="text-xs text-slate-500">Frostbyte XT · 1440P</div>
                     </div>
                 </div>
             </x-pctg.hover-card>
@@ -404,7 +404,7 @@
             <div class="relative flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
                 <div>
                     <h2 class="text-3xl font-black">Build now. Pay over time.</h2>
-                    <p class="mt-2 text-slate-400">Spread the cost on quality systems from Â£59.97/month.</p>
+                    <p class="mt-2 text-slate-400">Spread the cost on quality systems from £59.97/month.</p>
                 </div>
                 <x-pctg.button href="/builder" variant="primary">
                     <x-pctg.icon name="credit-card" class="h-5 w-5" /> Explore finance options
@@ -422,23 +422,23 @@
 
         <div class="grid grid-cols-2 gap-4 pctg-reveal sm:grid-cols-3 lg:grid-cols-4" style="--reveal-delay: 120ms">
             <a href="/best-gaming-pc-under-1000" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
-                <div class="text-xl font-bold text-white">Â£1000</div>
+                <div class="text-xl font-bold text-white">£1000</div>
                 <div class="mt-1 text-sm text-pctg-text-secondary">Entry gaming PC</div>
             </a>
             <a href="/best-gaming-pc-under-1500" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
-                <div class="text-xl font-bold text-white">Â£1500</div>
+                <div class="text-xl font-bold text-white">£1500</div>
                 <div class="mt-1 text-sm text-pctg-text-secondary">1440P gaming PC</div>
             </a>
             <a href="/best-gaming-pc-under-2000" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
-                <div class="text-xl font-bold text-white">Â£2000</div>
+                <div class="text-xl font-bold text-white">£2000</div>
                 <div class="mt-1 text-sm text-pctg-text-secondary">High-end gaming PC</div>
             </a>
             <a href="/best-gaming-pc-under-2500" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
-                <div class="text-xl font-bold text-white">Â£2500</div>
+                <div class="text-xl font-bold text-white">£2500</div>
                 <div class="mt-1 text-sm text-pctg-text-secondary">4K gaming PC</div>
             </a>
             <a href="/best-gaming-pc-under-3000" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
-                <div class="text-xl font-bold text-white">Â£3000</div>
+                <div class="text-xl font-bold text-white">£3000</div>
                 <div class="mt-1 text-sm text-pctg-text-secondary">Enthusiast gaming PC</div>
             </a>
             <a href="/best-pc-for-fortnite" class="rounded-2xl bg-white/5 p-5 ring-1 ring-white/10 transition hover:bg-white/10 hover:ring-pctg-primary/40">
@@ -463,7 +463,7 @@
                 Ready To Build?
             </h2>
             <p class="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
-                Get Your Gamers Edgeâ„¢ â€” the perfect PC for your budget and games is minutes away.
+                Get Your Gamers Edge™ — the perfect PC for your budget and games is minutes away.
             </p>
             <div class="mt-10 flex flex-wrap justify-center gap-4">
                 <x-pctg.button href="/builder" variant="primary" size="lg">
