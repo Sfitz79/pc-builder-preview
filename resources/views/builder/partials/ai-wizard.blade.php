@@ -20,20 +20,36 @@
 
     <div class="mt-10 grid gap-4 md:grid-cols-4">
 
-        <button class="pctg-card-hover text-center" @click="purpose = 'gaming'">
-            🎮 Gaming
+        <button
+            class="pctg-card-hover text-center"
+            :class="purpose === 'gaming' ? 'ring-2 ring-red-500/70 border-red-500/70' : ''"
+            @click="purpose = 'gaming'"
+        >
+            <span x-show="purpose === 'gaming'" x-cloak class="mr-1 text-red-500">✓</span>🎮 Gaming
         </button>
 
-        <button class="pctg-card-hover text-center" @click="purpose = 'streaming'">
-            🎥 Streaming
+        <button
+            class="pctg-card-hover text-center"
+            :class="purpose === 'streaming' ? 'ring-2 ring-red-500/70 border-red-500/70' : ''"
+            @click="purpose = 'streaming'"
+        >
+            <span x-show="purpose === 'streaming'" x-cloak class="mr-1 text-red-500">✓</span>🎥 Streaming
         </button>
 
-        <button class="pctg-card-hover text-center" @click="purpose = 'creation'">
-            🎨 Content Creation
+        <button
+            class="pctg-card-hover text-center"
+            :class="purpose === 'creation' ? 'ring-2 ring-red-500/70 border-red-500/70' : ''"
+            @click="purpose = 'creation'"
+        >
+            <span x-show="purpose === 'creation'" x-cloak class="mr-1 text-red-500">✓</span>🎨 Content Creation
         </button>
 
-        <button class="pctg-card-hover text-center" @click="purpose = 'ai'">
-            🤖 AI Development
+        <button
+            class="pctg-card-hover text-center"
+            :class="purpose === 'ai' ? 'ring-2 ring-red-500/70 border-red-500/70' : ''"
+            @click="purpose = 'ai'"
+        >
+            <span x-show="purpose === 'ai'" x-cloak class="mr-1 text-red-500">✓</span>🤖 AI Development
         </button>
 
     </div>
@@ -61,5 +77,13 @@
         </x-pctg.button>
 
     </div>
+
+    <p
+        class="mt-4 text-sm font-medium text-emerald-400"
+        x-show="aiRecommendation.total && !loading"
+        x-cloak
+    >
+        ✓ Build generated — £<span x-text="aiRecommendation.total.toLocaleString()"></span> total · review your parts below
+    </p>
 
 </x-pctg.hero>

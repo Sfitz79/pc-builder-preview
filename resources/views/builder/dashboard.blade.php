@@ -7,7 +7,7 @@
 
         @include('builder.partials.ai-wizard')
 
-        <div class="grid gap-6 lg:grid-cols-12">
+        <div id="build-results" class="grid gap-6 lg:grid-cols-12">
 
             <div class="lg:col-span-8 space-y-6">
 

@@ -61,6 +61,34 @@ window.builderState = () => ({
         return meta ? meta.content : '';
     },
 
+    selectionStorageKey() {
+        return 'pctg.checkout.selection';
+    },
+
+    persistSelection() {
+        const selection = {
+            components: Object.entries(this.selected)
+                .filter(([category, item]) => item && item.id)
+                .map(([category, item]) => ({
+                    category,
+                    id: item.id,
+                    name: item.name,
+                    price: item.price,
+                    tags: item.tags || null
+                })),
+            resolution: this.resolution,
+            budget: this.budget,
+            purpose: this.purpose
+        };
+
+        sessionStorage.setItem(this.selectionStorageKey(), JSON.stringify(selection));
+    },
+
+    checkout() {
+        this.persistSelection();
+        window.location.href = '/builder/checkout';
+    },
+
     async loadCatalog() {
         try {
             const response = await fetch(this.endpoints.catalog);
@@ -140,6 +168,7 @@ window.builderState = () => ({
     selectComponent(category, component) {
         this.selected[category] = component;
         this.componentModal = false;
+        this.persistSelection();
         this.validateBuild();
         this.refreshFps();
     },
@@ -235,8 +264,13 @@ window.builderState = () => ({
                 this.selected[category] = component;
             }
 
+            this.persistSelection();
             this.validateBuild();
             this.refreshFps();
+
+            setTimeout(() => {
+                document.getElementById('build-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 150);
         } catch (e) {
             // Ignore; keep current selection.
         } finally {
@@ -316,6 +350,7 @@ window.builderState = () => ({
         }
 
         this.loadedBuild = build;
+        this.persistSelection();
         this.validateBuild();
         this.refreshFps();
     },
