@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Trust proxies so URLs resolve to HTTPS behind Vercel / serverless edge.
         $middleware->trustProxies(at: '*');
+
+        // Seed the current-market catalogue on fresh deployments when enabled.
+        $middleware->append(\App\Http\Middleware\EnsureCatalogSeeded::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

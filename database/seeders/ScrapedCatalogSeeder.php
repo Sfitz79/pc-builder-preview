@@ -44,18 +44,7 @@ class ScrapedCatalogSeeder extends Seeder
 
     public function run(): void
     {
-        $files = [
-            'cpu' => 'cpu.json',
-            'cooler' => 'cooler.json',
-            'motherboard' => 'motherboard.json',
-            'gpu' => 'gpu.json',
-            'ram' => 'ram.json',
-            'storage' => 'storage.json',
-            'psu' => 'power-supply.json',
-            'case' => 'case.json',
-        ];
-
-        foreach ($files as $slug => $file) {
+        foreach ($this->sources() as $slug => $file) {
             $path = $this->resolvePath($file);
 
             if ($path === null) {
@@ -95,6 +84,79 @@ class ScrapedCatalogSeeder extends Seeder
         }
 
         $this->command?->info('ScrapedCatalogSeeder complete.');
+    }
+
+    /**
+     * Fast bulk variant used when the catalogue must be imported inside a
+     * single web request (e.g. a fresh deployment where build scripts do not
+     * run). Categories and manufacturers are resolved once and the components
+     * are upserted in a handful of statements keyed by the unique slug.
+     */
+    public function runFast(): void
+    {
+        $rows = [];
+        $now = now();
+
+        foreach ($this->sources() as $slug => $file) {
+            $path = $this->resolvePath($file);
+
+            if ($path === null) {
+                continue;
+            }
+
+            $items = json_decode((string) file_get_contents($path), true);
+
+            if (! is_array($items)) {
+                continue;
+            }
+
+            $category = $this->category($slug);
+
+            foreach ($this->filter($slug, $items) as $item) {
+                $name = trim((string) ($item['productName'] ?? ''));
+                $price = (float) ($item['price'] ?? 0);
+
+                if ($name === '' || $price <= 0) {
+                    continue;
+                }
+
+                $key = Str::slug($name) . '-' . substr(md5((string) ($item['url'] ?? $name)), 0, 6);
+
+                $payload = $this->payload($category, $name, $price, $item);
+                $payload['specs'] = is_array($payload['specs'])
+                    ? json_encode($payload['specs'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                    : $payload['specs'];
+
+                $rows[$key] = [
+                    ...$payload,
+                    'slug' => $key,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        foreach (array_chunk($rows, 250) as $chunk) {
+            Component::upsert(
+                $chunk,
+                ['slug'],
+                ['name', 'sku', 'description', 'price', 'currency', 'socket', 'wattage', 'stock', 'active', 'specs', 'manufacturer_id', 'updated_at']
+            );
+        }
+    }
+
+    protected function sources(): array
+    {
+        return [
+            'cpu' => 'cpu.json',
+            'cooler' => 'cooler.json',
+            'motherboard' => 'motherboard.json',
+            'gpu' => 'gpu.json',
+            'ram' => 'ram.json',
+            'storage' => 'storage.json',
+            'psu' => 'power-supply.json',
+            'case' => 'case.json',
+        ];
     }
 
     protected function filter(string $slug, array $items): array
@@ -202,15 +264,24 @@ class ScrapedCatalogSeeder extends Seeder
         );
     }
 
+    protected array $manufacturerCache = [];
+
     protected function manufacturer(string $name): int
     {
         $brand = preg_split('/[\s]+/', trim($name))[0] ?? 'Generic';
         $brand = trim((string) $brand, "()[]-,");
+        $slug = Str::slug($brand);
 
-        return Manufacturer::firstOrCreate(
-            ['slug' => Str::slug($brand)],
+        if (isset($this->manufacturerCache[$slug])) {
+            return $this->manufacturerCache[$slug];
+        }
+
+        $id = Manufacturer::firstOrCreate(
+            ['slug' => $slug],
             ['name' => $brand, 'active' => true]
         )->id;
+
+        return $this->manufacturerCache[$slug] = $id;
     }
 
     protected function payload(Category $category, string $name, float $price, array $item): array
