@@ -4,10 +4,11 @@
     'buildTotal' => null,
     'selectedCount' => null,
     'buildProgress' => null,
+    'live' => false,
 ])
 
 <x-app-layout :title="$title">
-    <div class="min-h-screen bg-[#0b0d12] text-white">
+    <div class="min-h-screen bg-[#0b0d12] text-white" x-data>
 
         {{-- Ambient Background --}}
         <div class="fixed inset-0 overflow-hidden pointer-events-none">
@@ -27,7 +28,7 @@
         <x-pctg.mobile-drawer />
 
         {{-- Metrics --}}
-        <x-pctg.metrics-bar :build-total="$buildTotal" />
+        <x-pctg.metrics-bar :build-total="$buildTotal" :live="$live" />
 
         <div class="relative">
             <div class="flex">
@@ -50,7 +51,7 @@
         </div>
 
         {{-- Checkout Footer --}}
-        <x-pctg.checkout-footer :build-total="$buildTotal" />
+        <x-pctg.checkout-footer :build-total="$buildTotal" :live="$live" />
 
     </div>
 </x-app-layout>

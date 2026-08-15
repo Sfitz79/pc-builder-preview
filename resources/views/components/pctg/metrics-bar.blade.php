@@ -1,5 +1,6 @@
 @props([
     'buildTotal' => null,
+    'live' => false,
 ])
 
 <div
@@ -25,6 +26,7 @@
         <x-pctg.metric
             title="Build Cost"
             :value="$buildTotal ?? '£1,799'"
+            :live="$live"
         />
 
         <x-pctg.metric

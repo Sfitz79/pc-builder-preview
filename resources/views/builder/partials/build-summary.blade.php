@@ -1,3 +1,7 @@
+@php
+    $buildDelivery = (float) config('pricing.build_delivery');
+@endphp
+
 <x-pctg.card>
 
     <x-pctg.section-heading
@@ -8,17 +12,17 @@
 
         <div class="flex justify-between">
             <span>Components</span>
-            <span x-text="'£' + buildCost()"></span>
+            <span x-text="'£' + buildCost().toLocaleString()"></span>
         </div>
 
         <div class="flex justify-between">
-            <span>Build Service</span>
-            <span>£89</span>
+            <span>Build &amp; Delivery</span>
+            <span>£{{ number_format($buildDelivery, 0) }}</span>
         </div>
 
         <div class="flex justify-between">
-            <span>Delivery</span>
-            <span>£20</span>
+            <span>Assembly, burn test &amp; cable management</span>
+            <span class="text-emerald-400">Included</span>
         </div>
 
         <hr class="border-slate-800">
@@ -31,12 +35,19 @@
 
             <span
                 class="text-2xl font-bold text-red-400"
-                x-text="'£' + (buildCost() + 109)"
+                x-text="'£' + (buildCost() + {{ $buildDelivery }}).toLocaleString()"
             ></span>
 
         </div>
 
         <div class="grid gap-3 pt-2">
+
+            <x-pctg.button
+                variant="secondary"
+                @click="checkout()"
+            >
+                Checkout
+            </x-pctg.button>
 
             <x-pctg.button
                 variant="secondary"

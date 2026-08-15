@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BuilderController;
 use App\Http\Controllers\BuildController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +48,15 @@ Route::prefix('builder')->name('builder.')->group(function () {
     Route::post('/builds/generate', [BuildController::class, 'generate'])->name('builds.generate');
     Route::patch('/builds/{build}', [BuildController::class, 'update'])->name('builds.update');
     Route::delete('/builds/{build}', [BuildController::class, 'destroy'])->name('builds.destroy');
+
+    // Orders / checkout — backed by PayPal.
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/paypal', [OrderController::class, 'paypal'])->name('orders.paypal');
+    Route::get('/orders/{order}/paypal/return', [OrderController::class, 'paypalReturn'])->name('orders.paypal.return');
+    Route::post('/orders/{order}/paypal/capture', [OrderController::class, 'capture'])->name('orders.paypal.capture');
+    Route::get('/orders/{order}/confirmed', [OrderController::class, 'confirmed'])->name('orders.confirmed');
+    Route::get('/builds/{build}/mockup.png', [OrderController::class, 'mockup'])->name('builds.mockup');
 });
 
 // Public shareable build URLs (no auth required).

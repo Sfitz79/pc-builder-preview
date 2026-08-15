@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs';
 import './builder';
+import './checkout';
 import './pctg-intro';
 import './pctg-page-reveal';
 import './pctg-count-up';
