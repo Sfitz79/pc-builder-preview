@@ -39,26 +39,10 @@
 
     <x-pctg.seo-budget-table />
 
-    <x-pctg.card class="mt-10">
-
-        <h2 class="text-3xl font-bold">
-            Recommended £1500 Gaming PC Build
-        </h2>
-
-        <div class="mt-8 space-y-4">
-
-            <div><strong>CPU:</strong> AMD Ryzen 7 9700X</div>
-            <div><strong>GPU:</strong> NVIDIA RTX 5070</div>
-            <div><strong>Memory:</strong> 32GB DDR5 6000</div>
-            <div><strong>Storage:</strong> 2TB NVMe SSD</div>
-            <div><strong>Motherboard:</strong> AMD B650 Platform</div>
-            <div><strong>Power Supply:</strong> 750W 80+ Gold</div>
-            <div><strong>Cooling:</strong> Tower Air Cooler</div>
-            <div><strong>Case:</strong> High Airflow Mid Tower</div>
-
-        </div>
-
-    </x-pctg.card>
+    <x-pctg.seo-recommended-build
+        :budget="1500"
+        :title="'Recommended £1500 Gaming PC Build'"
+    />
 
     <section class="mt-16">
 

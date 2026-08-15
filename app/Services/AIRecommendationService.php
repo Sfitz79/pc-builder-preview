@@ -55,15 +55,33 @@ class AIRecommendationService
 
         $selection = [];
         $spent = 0.0;
+        $slack = 0.0;
         $cpuSocket = null;
+        $hardCap = $budget * 0.95;
+
+        // Per-category budget shares so the greedy pick cannot run away from
+        // the user's chosen budget the way a flat running-total check does.
+        $shares = [
+            'cpu' => 0.30,
+            'gpu' => 0.40,
+            'ram' => 0.08,
+            'storage' => 0.07,
+            'motherboard' => 0.07,
+            'psu' => 0.04,
+            'case' => 0.02,
+            'cooler' => 0.02,
+        ];
 
         foreach ($pools as $slug => $pool) {
             if ($pool->isEmpty()) {
                 continue;
             }
 
+            $allow = $budget * ($shares[$slug] ?? 0.05) + $slack;
+
             $candidates = $pool
-                ->filter(fn (Component $component) => ($spent + (float) $component->price) <= $budget * 0.95);
+                ->filter(fn (Component $component) => (float) $component->price <= $allow
+                    && ($spent + (float) $component->price) <= $hardCap);
 
             if ($slug === 'motherboard' && $cpuSocket !== null) {
                 $socketMatch = $candidates
@@ -78,7 +96,16 @@ class AIRecommendationService
             $pick = $candidates->sortByDesc('score')->first();
 
             if ($pick === null) {
-                $pick = $pool->sortByDesc('score')->first();
+                // Nothing fits this category within the share — try anything
+                // that still fits the overall budget before giving up on it.
+                $pick = $pool
+                    ->filter(fn (Component $component) => ($spent + (float) $component->price) <= $hardCap)
+                    ->sortByDesc('score')
+                    ->first();
+            }
+
+            if ($pick === null) {
+                continue;
             }
 
             $selection[$slug] = [
@@ -93,6 +120,7 @@ class AIRecommendationService
             }
 
             $spent += (float) $pick->price;
+            $slack = max(0.0, $allow - (float) $pick->price);
         }
 
         if ($userId !== null) {

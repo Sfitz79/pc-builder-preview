@@ -38,25 +38,11 @@
 
     <x-pctg.seo-budget-table />
 
-    <x-pctg.card class="mt-10">
-
-        <h2 class="text-3xl font-bold">
-            Recommended £1000 Gaming PC Build
-        </h2>
-
-        <div class="mt-8 space-y-4">
-
-            <div><strong>CPU:</strong> AMD Ryzen 5 7600</div>
-            <div><strong>GPU:</strong> NVIDIA RTX 4060</div>
-            <div><strong>Memory:</strong> 32GB DDR5</div>
-            <div><strong>Storage:</strong> 1TB NVMe SSD</div>
-            <div><strong>Motherboard:</strong> AM5 B650 Platform</div>
-            <div><strong>Power Supply:</strong> 650W 80+ Gold</div>
-            <div><strong>Case:</strong> Airflow Focused Mid Tower</div>
-
-        </div>
-
-    </x-pctg.card>
+    <x-pctg.seo-recommended-build
+        :budget="1000"
+        :title="'Recommended £1000 Gaming PC Build'"
+        :resolution="'1080P'"
+    />
 
     <section class="mt-16">
 

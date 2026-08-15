@@ -1,20 +1,25 @@
 ﻿@props(['active' => 'builder'])
 
 <header
+    x-data="{ scrolled: false }"
+    x-init="scrolled = window.scrollY > 12"
+    @scroll.window.passive="scrolled = window.scrollY > 12"
+    :class="scrolled ? 'h-12 bg-black/85 shadow-lg shadow-black/40' : 'h-16 bg-black/50'"
     class="
         sticky
         top-0
         z-50
         border-b
         border-slate-800
-        bg-black/50
         backdrop-blur-xl
+        transition-all
+        duration-300
     "
 >
     <div
         class="
             flex
-            h-16
+            h-full
             items-center
             justify-between
             px-4
@@ -37,8 +42,8 @@
                     <x-pctg.icon name="zap" class="h-5 w-5" />
                 </span>
                 <span class="leading-tight">
-                    <span class="block text-lg font-bold">PCTG Builder</span>
-                    <span class="block text-xs text-slate-500">Get Your Gamers Edge&trade;</span>
+                    <span :class="scrolled ? 'text-base' : 'text-lg'" class="block font-bold transition-all duration-300">PCTG Builder</span>
+                    <span x-show="!scrolled" x-transition.opacity.duration.200ms class="block text-xs text-slate-500">Get Your Gamers Edge&trade;</span>
                 </span>
             </a>
         </div>

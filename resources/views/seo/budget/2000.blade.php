@@ -38,26 +38,10 @@
 
     <x-pctg.seo-budget-table />
 
-    <x-pctg.card class="mt-10">
-
-        <h2 class="text-3xl font-bold">
-            Recommended £2000 Gaming PC Build
-        </h2>
-
-        <div class="mt-8 space-y-4">
-
-            <div><strong>CPU:</strong> AMD Ryzen 7 9700X</div>
-            <div><strong>GPU:</strong> NVIDIA RTX 5070 Ti</div>
-            <div><strong>Memory:</strong> 32GB DDR5 6000</div>
-            <div><strong>Storage:</strong> 2TB NVMe Gen4 SSD</div>
-            <div><strong>Motherboard:</strong> AMD B650 Gaming Platform</div>
-            <div><strong>Cooling:</strong> 360mm AIO Liquid Cooler</div>
-            <div><strong>Power Supply:</strong> 850W Gold PSU</div>
-            <div><strong>Case:</strong> Premium Airflow Chassis</div>
-
-        </div>
-
-    </x-pctg.card>
+    <x-pctg.seo-recommended-build
+        :budget="2000"
+        :title="'Recommended £2000 Gaming PC Build'"
+    />
 
     <section class="mt-16">
 
