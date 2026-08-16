@@ -33,6 +33,13 @@
             </x-nav-link>
 
             <x-nav-link
+                :href="route('software')"
+                :active="request()->routeIs('software')"
+            >
+                Software
+            </x-nav-link>
+
+            <x-nav-link
                 :href="url('/support')"
                 :active="request()->routeIs('support')"
             >

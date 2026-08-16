@@ -17,6 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Seed the current-market catalogue on fresh deployments when enabled.
         $middleware->append(\App\Http\Middleware\EnsureCatalogSeeded::class);
+
+        // Metenzi delivers webhooks as unsigned-plain HMAC'd POSTs from its
+        // servers, so the receiver skips the session CSRF check (the payload
+        // itself is verified inside the controller).
+        $middleware->validateCsrfTokens(except: ['webhooks/metenzi']);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

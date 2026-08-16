@@ -3,6 +3,7 @@
 use App\Http\Controllers\BuilderController;
 use App\Http\Controllers\BuildController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SoftwareController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,6 +70,23 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Software store (license keys fulfilled via Metenzi).
+Route::get('/software', [SoftwareController::class, 'index'])->name('software');
+
+Route::prefix('software')->name('software.')->group(function () {
+    Route::post('/purchases', [SoftwareController::class, 'purchase'])->name('purchases.store');
+    Route::get('/purchases/{purchase}/payment', [SoftwareController::class, 'payment'])->name('purchases.payment');
+    Route::post('/purchases/{purchase}/paypal', [SoftwareController::class, 'paypal'])->name('purchases.paypal');
+    Route::get('/purchases/{purchase}/paypal/return', [SoftwareController::class, 'paypalReturn'])->name('purchases.paypal.return');
+    Route::post('/purchases/{purchase}/paypal/capture', [SoftwareController::class, 'capture'])->name('purchases.paypal.capture');
+    Route::post('/purchases/{purchase}/fulfil', [SoftwareController::class, 'retryFulfilment'])->name('purchases.fulfil');
+    Route::get('/purchases/{purchase}/confirmed', [SoftwareController::class, 'confirmed'])->name('purchases.confirmed');
+});
+
+// Metenzi webhook receiver (CSRF-exempt, HMAC-verified).
+Route::post('/webhooks/metenzi', [SoftwareController::class, 'webhook'])->name('metenzi.webhook');
+
+
 // Public info pages linked from the primary navigation.
 Route::view('/components', 'info-page', [
     'title' => 'Components',
@@ -132,6 +150,7 @@ Route::view('/terms', 'info-page', [
         ['icon' => 'cpu', 'title' => 'Build Accuracy', 'body' => 'Parts shown are subject to availability; equivalent or better substitutions are made at our discretion.'],
         ['icon' => 'gauge', 'title' => 'FPS Estimates', 'body' => 'Performance estimates are indicative and vary with drivers, thermals and background workloads.'],
         ['icon' => 'wallet', 'title' => 'Governing Law', 'body' => 'These terms are governed by the laws of England and Wales.'],
+        ['icon' => 'layers', 'title' => 'Software Store', 'body' => 'License keys are delivered digitally after payment clears and are not refundable once shown. Windows and Office keys require system and region compatibility.'],
     ],
 ])->name('terms');
 
@@ -160,6 +179,7 @@ Route::get('/sitemap.xml', function () {
         '/builder',
         '/components',
         '/prebuilts',
+        '/software',
         '/support',
         '/privacy',
         '/terms',
