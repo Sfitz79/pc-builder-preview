@@ -28,7 +28,7 @@ class SoftwareController extends Controller
      */
     public function index(): View
     {
-        $this->syncIfEmpty();
+        $syncError = $this->syncIfEmpty();
 
         $products = SoftwareProduct::active()
             ->orderBy('category')
@@ -40,6 +40,7 @@ class SoftwareController extends Controller
             'configured' => $this->paypal->configured() && $this->metenzi->configured(),
             'balance' => $this->safeBalance(),
             'gbpRate' => $this->metenzi->gbpRate(),
+            'syncError' => $syncError,
         ]);
     }
 
@@ -345,10 +346,10 @@ class SoftwareController extends Controller
             ->all();
     }
 
-    protected function syncIfEmpty(): void
+    protected function syncIfEmpty(): ?string
     {
         if (! $this->metenzi->configured() || SoftwareProduct::query()->exists()) {
-            return;
+            return null;
         }
 
         try {
@@ -359,8 +360,12 @@ class SoftwareController extends Controller
 
                 (new \App\Console\Commands\SyncSoftwareProducts())->handle(app(MetenziService::class));
             });
+
+            return null;
         } catch (\Throwable $e) {
             report($e);
+
+            return $e->getMessage();
         }
     }
 
