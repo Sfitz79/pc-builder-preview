@@ -10,6 +10,7 @@ use App\Services\PayPalService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Factory as ViewFactory;
 
@@ -19,8 +20,7 @@ class SoftwareController extends Controller
         protected ViewFactory $view,
         protected PayPalService $paypal,
         protected MetenziService $metenzi,
-    ) {
-    }
+    ) {}
 
     /**
      * Software store catalogue. The product table is populated lazily on the
@@ -28,7 +28,7 @@ class SoftwareController extends Controller
      */
     public function index(): View
     {
-        $syncError = $this->syncIfEmpty();
+        $this->syncIfEmpty();
 
         $products = SoftwareProduct::active()
             ->orderBy('category')
@@ -40,7 +40,6 @@ class SoftwareController extends Controller
             'configured' => $this->paypal->configured() && $this->metenzi->configured(),
             'balance' => $this->safeBalance(),
             'gbpRate' => $this->metenzi->gbpRate(),
-            'syncError' => $syncError,
         ]);
     }
 
@@ -85,7 +84,7 @@ class SoftwareController extends Controller
             'amount' => (float) $purchase->amount_gbp,
             'currency' => $purchase->currency,
             'paypal_configured' => $this->paypal->configured(),
-            'payment_url' => url('/software/purchases/' . $purchase->uuid . '/payment?owner_token=' . $purchase->owner_token),
+            'payment_url' => url('/software/purchases/'.$purchase->uuid.'/payment?owner_token='.$purchase->owner_token),
         ], 201);
     }
 
@@ -119,8 +118,8 @@ class SoftwareController extends Controller
         try {
             $paypalOrder = $this->paypal->createOrder(
                 (float) $purchase->amount_gbp,
-                'PCTG Software — ' . $purchase->product_name,
-                url('/software/purchases/' . $purchase->uuid . '/paypal/return?owner_token=' . urlencode((string) $purchase->owner_token)),
+                'PCTG Software — '.$purchase->product_name,
+                url('/software/purchases/'.$purchase->uuid.'/paypal/return?owner_token='.urlencode((string) $purchase->owner_token)),
                 url('/software')
             );
 
@@ -258,8 +257,8 @@ class SoftwareController extends Controller
                     'quantity' => 1,
                     'maxUnitPrice' => (string) ($purchase->product?->retail_price ?? 0),
                 ]],
-                externalOrderId: 'SW-' . $purchase->uuid,
-                idempotencyKey: 'sw-' . $purchase->uuid,
+                externalOrderId: 'SW-'.$purchase->uuid,
+                idempotencyKey: 'sw-'.$purchase->uuid,
             );
 
             $purchase->update([
@@ -282,7 +281,7 @@ class SoftwareController extends Controller
             }
         } catch (MetenziException $e) {
             report($e);
-            $purchase->update(['notes' => 'Fulfilment pending — ' . $e->getMessage()]);
+            $purchase->update(['notes' => 'Fulfilment pending — '.$e->getMessage()]);
         }
     }
 
@@ -346,10 +345,10 @@ class SoftwareController extends Controller
             ->all();
     }
 
-    protected function syncIfEmpty(): ?string
+    protected function syncIfEmpty(): void
     {
         if (! $this->metenzi->configured() || SoftwareProduct::query()->exists()) {
-            return null;
+            return;
         }
 
         try {
@@ -358,14 +357,10 @@ class SoftwareController extends Controller
                     return;
                 }
 
-                (new \App\Console\Commands\SyncSoftwareProducts())->handle(app(MetenziService::class));
+                Artisan::call('software:sync');
             });
-
-            return null;
         } catch (\Throwable $e) {
             report($e);
-
-            return $e->getMessage();
         }
     }
 
@@ -405,7 +400,7 @@ class SoftwareController extends Controller
         $payload['confirmed'] = true;
         $payload['paypal_capture_id'] = $purchase->paypal_capture_id;
         $payload['paid_at'] = $purchase->paid_at?->toIso8601String();
-        $payload['confirmation_url'] = url('/software/purchases/' . $purchase->uuid . '/confirmed?owner_token=' . urlencode((string) $purchase->owner_token));
+        $payload['confirmation_url'] = url('/software/purchases/'.$purchase->uuid.'/confirmed?owner_token='.urlencode((string) $purchase->owner_token));
 
         if ($purchase->status === SoftwarePurchase::STATUS_FULFILLED) {
             $payload['keys'] = $purchase->keys ?? [];

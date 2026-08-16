@@ -81,12 +81,6 @@
             </div>
         </div>
 
-        @if ($syncError)
-            <div class="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-300">
-                <strong>Sync diagnostic:</strong> {{ $syncError }}
-            </div>
-        @endif
-
         @if (! $configured)
             <div class="mt-10 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
                 <p class="flex items-center gap-3 font-medium text-amber-300">

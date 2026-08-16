@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\SoftwareProduct;
 use App\Models\SoftwarePurchase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class SoftwareStoreTest extends TestCase
@@ -58,6 +59,51 @@ class SoftwareStoreTest extends TestCase
             ->assertSee('Test Phase — Orders by Request');
     }
 
+    public function test_index_lazy_sync_populates_the_catalogue_when_empty(): void
+    {
+        SoftwareProduct::query()->delete();
+
+        config([
+            'services.paypal.client_id' => 'test-client',
+            'services.paypal.secret' => 'test-secret',
+            'metenzi.api_key' => 'test-key',
+        ]);
+
+        Http::fake([
+            'metenzi.com/api/public/products*' => Http::response([
+                'data' => [[
+                    'id' => 'P999999',
+                    'sku' => 'WIN11-PRO-RETAIL',
+                    'name' => 'Windows 11 Pro Retail Key',
+                    'category' => 'Operating Systems',
+                    'platform' => 'Windows',
+                    'description' => 'Full retail licence.',
+                    'shortDescription' => 'Retail key',
+                    'retailPrice' => 23.41,
+                    'retailPriceCents' => 2341,
+                    'stock' => 5,
+                    'status' => 'active',
+                    'warrantyDays' => 30,
+                    'imageUrl' => null,
+                    'instructions' => null,
+                ]],
+            ], 200),
+            'metenzi.com/api/public/balance*' => Http::response([
+                'data' => ['availableCredit' => 10.0, 'currency' => 'EUR'],
+            ], 200),
+        ]);
+
+        $response = $this->get('/software');
+
+        $response->assertOk()
+            ->assertSee('Windows 11 Pro Retail Key')
+            ->assertSee('&pound;19.90', false)
+            ->assertDontSee('Sync diagnostic');
+
+        $this->assertSame(1, SoftwareProduct::count());
+        $this->assertSame('P999999', SoftwareProduct::first()->metenzi_product_id);
+    }
+
     public function test_purchase_creates_an_awaiting_payment_purchase(): void
     {
         $response = $this->postJson('/software/purchases', [
@@ -96,10 +142,10 @@ class SoftwareStoreTest extends TestCase
             'status' => SoftwarePurchase::STATUS_PENDING,
         ]);
 
-        $this->get('/software/purchases/' . $purchase->uuid . '/payment')
+        $this->get('/software/purchases/'.$purchase->uuid.'/payment')
             ->assertForbidden();
 
-        $this->get('/software/purchases/' . $purchase->uuid . '/payment?owner_token=token-abc')
+        $this->get('/software/purchases/'.$purchase->uuid.'/payment?owner_token=token-abc')
             ->assertOk()
             ->assertSee('Windows 11 Pro OEM Key')
             ->assertSee('Pay with PayPal')
@@ -119,7 +165,7 @@ class SoftwareStoreTest extends TestCase
         ]);
 
         $this->withHeader('X-Owner-Token', 'token-abc')
-            ->postJson('/software/purchases/' . $purchase->uuid . '/paypal')
+            ->postJson('/software/purchases/'.$purchase->uuid.'/paypal')
             ->assertStatus(503);
     }
 
@@ -167,7 +213,7 @@ class SoftwareStoreTest extends TestCase
             'fulfilled_at' => now(),
         ]);
 
-        $response = $this->get('/software/purchases/' . $purchase->uuid . '/confirmed?owner_token=token-abc');
+        $response = $this->get('/software/purchases/'.$purchase->uuid.'/confirmed?owner_token=token-abc');
 
         $response->assertOk()
             ->assertSee('Your key is ready')
