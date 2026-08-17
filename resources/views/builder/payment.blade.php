@@ -1,4 +1,4 @@
-﻿<x-pctg.layouts.builder
+<x-pctg.layouts.builder
     title="Payment"
     active="checkout"
     :live="true"
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="mt-5">
-                    <x-pctg.button :href="'{{ url('/builder/orders') }}' + '/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" variant="primary" size="lg">
+                    <x-pctg.button :href="'/builder/orders/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" variant="primary" size="lg">
                         View invoice
                     </x-pctg.button>
                 </div>

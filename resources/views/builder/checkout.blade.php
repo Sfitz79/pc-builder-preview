@@ -1,4 +1,4 @@
-﻿<x-pctg.layouts.builder
+<x-pctg.layouts.builder
     title="Review & Checkout"
     active="checkout"
     :live="true"
@@ -118,13 +118,13 @@
                 </dl>
 
                 <template x-if="$store.checkout.paid && $store.checkout.confirmationUrl">
-                    <x-pctg.button :href="'{{ url('/builder/orders') }}' + '/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" variant="primary" size="lg" class="w-full">
+                    <x-pctg.button :href="'/builder/orders/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" variant="primary" size="lg" class="w-full">
                         View your invoice
                     </x-pctg.button>
                 </template>
 
                 <template x-if="!$store.checkout.paid">
-                    <x-pctg.button :href="'{{ url('/builder/checkout/payment') }}' + '?order=' + ($store.checkout.order ? $store.checkout.order.order_id : '')" variant="primary" size="lg" class="w-full">
+                    <x-pctg.button :href="'/builder/checkout/payment?order=' + ($store.checkout.order ? $store.checkout.order.order_id : '')" variant="primary" size="lg" class="w-full">
                         <x-pctg.icon name="credit-card" class="h-5 w-5" /> Continue to payment
                     </x-pctg.button>
                 </template>
