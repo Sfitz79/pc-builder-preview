@@ -47,9 +47,9 @@
                     </div>
                 </div>
                 <div class="mt-5">
-                    <x-pctg.button :href="'/builder/orders/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" variant="primary" size="lg">
+                    <a :href="'/builder/orders/' + ($store.checkout.order ? $store.checkout.order.order_id : '') + '/confirmed'" class="inline-flex items-center gap-2 px-8 py-4 text-lg pctg-button power-pulse">
                         View invoice
-                    </x-pctg.button>
+                    </a>
                 </div>
             </x-pctg.card>
 
